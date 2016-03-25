@@ -33,7 +33,7 @@ class LargeImageConverter(object):
             init_array = self.xp.random.uniform(-20, 20, init_array.shape, dtype=init_array.dtype)
 
         subrects = []
-        #(step-wrap)*(split-1) = w-step
+        ### (step-wrap)*(split-1) = w-step
         xstep = (init_array.shape[2]+(xsplit-1)*overwrap-1) / xsplit
         ystep = (init_array.shape[3]+(ysplit-1)*overwrap-1) / ysplit
         for x in range(0, init_array.shape[2]-xstep, xstep-overwrap):
@@ -44,14 +44,10 @@ class LargeImageConverter(object):
         target_texture_ratios = []
         for x1, y1, x2, y2 in subrects:
             subimg = self.xp.asarray(content_array[:, :, x1:x2, y1:y2])
-            # rects_content_layers.append(self.model.forward_layers(chainer.Variable(subimg, volatile=True), average_pooling=average_pooling))
             layers = self.model.forward_layers(chainer.Variable(subimg, volatile=True))
             texture_feature = self.converter._to_texture_feature(layers)
             target_texture_ratio = self.converter.optimize_texture_feature(texture_feature)
             target_texture_ratios.append(target_texture_ratio)
-            # rects_content_layers.append([
-            #     chainer.Variable(layer.data) for layer in layers
-            # ])
 
         parameter_now = chainer.links.Parameter(init_array)
         self.optimizer.setup(parameter_now)

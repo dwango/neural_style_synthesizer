@@ -6,6 +6,9 @@ import chainer.functions
 from PIL import Image
 
 def load_image(img_file):
+    """
+    :return: Image
+    """
     img = Image.open(img_file)
     if len(img.size) == 2: #gray scale
         img_rgb = Image.new("RGB", img.size)
