@@ -4,7 +4,13 @@ neural_style_synthesizer
 INSTALL
 ---------------
 
+The model files of neural networks are not contained in this repository.
+You can get them from [nin_imagenet.caffemodel](https://gist.github.com/mavenlin/d802a5849de39225bcc6) and [VGG_ILSVRC_16_layers.caffemodel](https://gist.github.com/ksimonyan/211839e770f7b538e2d8#file-readme-md).
+
+Dependent libraries are installed with the following script.
+
 ```
+pip install numpy
 pip install -r requirements.txt
 ```
 
@@ -19,6 +25,7 @@ with CPU
 
 ```
 python bin/convert_image_multi.py \
+  --modelpath=./VGG_ILSVRC_16_layers.caffemodel \
   --iteration=100 \
   --gpu=-1 \
   --xsplit=1 --ysplit=1 --resize=300 \
@@ -31,6 +38,7 @@ with GPU
 
 ```
 python bin/convert_image_multi.py \
+  --modelpath=./VGG_ILSVRC_16_layers.caffemodel \
   --iteration=100 \
   --gpu=0 \
   --xsplit=1 --ysplit=1 --resize=300 \
@@ -46,6 +54,7 @@ Split style image to 2x2
 
 ```
 python bin/convert_image_multi.py \
+  --modelpath=./VGG_ILSVRC_16_layers.caffemodel \
   --iteration=100 \
   --gpu=0 \
   --xsplit=2 --ysplit=2 --resize=300 \
