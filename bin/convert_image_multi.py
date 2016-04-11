@@ -22,6 +22,7 @@ parser.add_argument("--debug", action="store_true")
 parser.add_argument("--debug_span", type=int, default=100)
 parser.add_argument("--average_pooling", action="store_true")
 parser.add_argument("--model", default="vgg")
+parser.add_argument("--modelpath")
 parser.add_argument("--random_init", action="store_true")
 parser.add_argument("--init_image", default=None)
 args = parser.parse_args()
@@ -44,7 +45,7 @@ content_img = neural_art.utility.resize_img(content_img, args.resize)
 init_img = neural_art.utility.load_image(args.init_image)
 init_img = neural_art.utility.resize_img(init_img, args.resize)
 
-model = neural_art.utility.load_nn(args.model)
+model = neural_art.utility.load_nn(args.model, modelpath=args.modelpath)
 converter = neural_art.image_converters.MultiReferenceImageConverter(texture_imgs, gpu=args.gpu, content_weight=args.content_weight, texture_weight=1, model=model, average_pooling=args.average_pooling)
 
 if args.debug:

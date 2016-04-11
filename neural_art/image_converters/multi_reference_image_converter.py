@@ -5,7 +5,6 @@ import chainer.optimizers
 import chainer.functions
 import neural_art
 import numpy
-import scipy.optimize
 import image_converter
 import openopt
 
