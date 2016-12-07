@@ -77,3 +77,17 @@ python bin/convert_video.py \
 ```
 
 Then you can find the style transferred video at `output_directory/out.avi` after 100 x frame times calculation.
+
+### Optimal Blended Texture Transfer
+
+Please see https://nico-opendata.jp/en/casestudy/neural_style_synthesizer/index.html for technical details.
+
+```
+python bin/convert_image_multistyle.py \
+  --model=vgg_nopad \
+  --iteration=100 \
+  --gpu=3 --xsplit=1 --ysplit=1 --resize=200 \
+  /path/to/input/file \
+  /path/to/directory/contains/multiple/refarence/files \
+  --debug --out_dir=/path/of/output
+```
