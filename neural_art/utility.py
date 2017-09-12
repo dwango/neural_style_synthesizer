@@ -22,17 +22,17 @@ def resize_img(img, max_length):
     """
     orig_w, orig_h = img.size[0], img.size[1]
     if orig_w<orig_h:
-        new_w = max_length*orig_w/orig_h
+        new_w = max_length*orig_w//orig_h
         new_h = max_length
     else:
         new_w = max_length
-        new_h = max_length*orig_h/orig_w
+        new_h = max_length*orig_h//orig_w
     return img.resize((new_w,new_h))
 
 def load_nn(modelname, modelpath = None):
     cachepath = "{}.dump".format(modelname)
     if os.path.exists(cachepath):
-        nn = pickle.load(open(cachepath))
+        nn = pickle.load(open(cachepath, "rb"))
     else:
         if modelname == 'vgg':
             if modelpath is None: modelpath = "VGG_ILSVRC_16_layers.caffemodel"
@@ -44,10 +44,10 @@ def load_nn(modelname, modelpath = None):
             if modelpath is None: modelpath = "nin_imagenet.caffemodel"
             nn = neural_art.models.NIN(modelpath)
         else:
-            print 'invalid model name.'
+            print('invalid model name.')
             exit(1)
 
-        with open(cachepath, "w+") as f:
+        with open(cachepath, "wb+") as f:
             pickle.dump(nn, f, 0)
     return nn
 

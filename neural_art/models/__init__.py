@@ -1,1 +1,1 @@
-from vgg import *
+from .vgg import *
