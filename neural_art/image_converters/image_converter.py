@@ -82,7 +82,7 @@ class BaseImageConverter(object):
         :type layers: List[chainer.Variable]
         """
         subvectors = []
-        for layer_index in xrange(len(layers)):
+        for layer_index in range(len(layers)):
             layer = layers[layer_index]
             beta = numpy.sqrt(numpy.float32(self.model.beta[layer_index]) / len(layers))
             texture_matrix = float(beta) * neural_art.utility.get_matrix(layer)

@@ -5,7 +5,7 @@ import chainer.optimizers
 import chainer.functions
 import neural_art
 import numpy
-import image_converter
+from . import image_converter
 import openopt
 
 class MultiReferenceImageConverter(image_converter.BaseImageConverter):
@@ -80,6 +80,6 @@ class MultiReferenceImageConverter(image_converter.BaseImageConverter):
         p = openopt.QP(H, f, Aeq=aeq, beq=beq, lb=lower_bound)
         r = p.solve("cvxopt_qp")
         ratio = r.xf
-        print "Style ratios: ", ratio
-        print "sum", self.xp.sum(ratio)
+        print("Style ratios: ", ratio)
+        print("sum", self.xp.sum(ratio))
         return ratio

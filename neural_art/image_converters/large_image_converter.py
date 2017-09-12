@@ -1,7 +1,7 @@
 import neural_art
 import chainer
 import chainer.cuda
-import multi_reference_image_converter
+from . import multi_reference_image_converter
 import numpy
 import os
 
