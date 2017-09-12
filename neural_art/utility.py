@@ -3,6 +3,7 @@ import pickle
 import neural_art
 import numpy
 import chainer.functions
+import chainer.serializers
 from PIL import Image
 
 def load_image(img_file):
@@ -31,24 +32,25 @@ def resize_img(img, max_length):
 
 def load_nn(modelname, modelpath = None):
     cachepath = "{}.dump".format(modelname)
+    model = None
     if os.path.exists(cachepath):
-        nn = pickle.load(open(cachepath, "rb"))
+        model = pickle.load(open(cachepath, "rb"))
+
+    if modelname == 'vgg':
+        if modelpath is None: modelpath = "VGG_ILSVRC_16_layers.caffemodel"
+        nn = neural_art.models.VGG(modelpath, no_padding=False, model=model)
+    elif modelname == 'vgg_nopad':
+        if modelpath is None: modelpath = "VGG_ILSVRC_16_layers.caffemodel"
+        nn = neural_art.models.VGG(modelpath, no_padding=True, model=model)
+    elif modelname == 'nin':
+        if modelpath is None: modelpath = "nin_imagenet.caffemodel"
+        nn = neural_art.models.NIN(modelpath, model=model)
     else:
-        if modelname == 'vgg':
-            if modelpath is None: modelpath = "VGG_ILSVRC_16_layers.caffemodel"
-            nn = neural_art.models.VGG(modelpath, no_padding=False)
-        elif modelname == 'vgg_nopad':
-            if modelpath is None: modelpath = "VGG_ILSVRC_16_layers.caffemodel"
-            nn = neural_art.models.VGG(modelpath, no_padding=True)
-        elif modelname == 'nin':
-            if modelpath is None: modelpath = "nin_imagenet.caffemodel"
-            nn = neural_art.models.NIN(modelpath)
-        else:
-            print('invalid model name.')
-            exit(1)
+        print('invalid model name.')
+        exit(1)
 
         with open(cachepath, "wb+") as f:
-            pickle.dump(nn, f, 0)
+            pickle.dump(nn.model, f, 0)
     return nn
 
 def img2array(img):

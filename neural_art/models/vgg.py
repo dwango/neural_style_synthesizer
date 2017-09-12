@@ -3,8 +3,11 @@ import chainer
 import chainer.functions
 import chainer.links.caffe
 class VGG(object):
-    def __init__(self, caffemodelpath, alpha=[0,0,1,1], beta=[0.000244140625, 6.103515625e-05, 1.52587890625e-05, 3.814697265625e-06], no_padding=False): ### beta is decided by experiments
-        self.model = chainer.links.caffe.CaffeFunction(caffemodelpath)
+    def __init__(self, caffemodelpath, alpha=[0,0,1,1], beta=[0.000244140625, 6.103515625e-05, 1.52587890625e-05, 3.814697265625e-06], no_padding=False, model=None): ### beta is decided by experiments
+        if model is None:
+            self.model = chainer.links.caffe.CaffeFunction(caffemodelpath)
+        else:
+            self.model = model
         self.alpha = alpha
         self.beta = beta
         if no_padding:
