@@ -7,6 +7,8 @@ import neural_art
 import numpy
 from . import image_converter
 import openopt
+from builtins import range
+
 
 class MultiReferenceImageConverter(image_converter.BaseImageConverter):
     def __init__(self, texture_imgs, gpu=-1, optimizer=None, model=None, content_weight=1, texture_weight=1, average_pooling=False):
@@ -19,7 +21,7 @@ class MultiReferenceImageConverter(image_converter.BaseImageConverter):
 
     def _constructed_feature(self, ratio):
         constructed_feature = None
-        for texture_feature_index in xrange(len(self.texture_features)):
+        for texture_feature_index in range(len(self.texture_features)):
             if constructed_feature is None:
                 constructed_feature = ratio[texture_feature_index] * self.texture_features[texture_feature_index]
             else:
@@ -34,7 +36,7 @@ class MultiReferenceImageConverter(image_converter.BaseImageConverter):
         else:
             self.texture_ratio = numpy.ones(len(self.texture_features)) / len(self.texture_features)
         self.constructed_feature = self._constructed_feature(self.texture_ratio)
-        for i in xrange(0, initial_feature.data.shape[0], 10000):
+        for i in range(0, initial_feature.data.shape[0], 10000):
             print(i, ":", self.constructed_feature.data[i:i+10000].sum()/initial_feature.data[i:i+10000].sum())
         return super(MultiReferenceImageConverter, self).convert_debug(content_img=content_img, init_img=init_img, output_directory=output_directory, max_iteration=max_iteration, debug_span=debug_span, random_init=random_init)
 
@@ -68,12 +70,12 @@ class MultiReferenceImageConverter(image_converter.BaseImageConverter):
         """
         num_textures = len(self.texture_features)
         H = numpy.zeros((num_textures, num_textures))
-        for x in xrange(num_textures):
-            for y in xrange(num_textures):
+        for x in range(num_textures):
+            for y in range(num_textures):
                 H[x, y] = 2*self.texture_features[x].data.dot(self.texture_features[y].data)
         print("H:", H)
         f = numpy.zeros(num_textures)
-        for x in xrange(num_textures):
+        for x in range(num_textures):
             f[x] = -2 * target_feature.data.dot(self.texture_features[x].data)
         lower_bound = numpy.zeros(num_textures) # non negative
         aeq, beq = numpy.ones(num_textures), 1 # w1+w2+... = 1
