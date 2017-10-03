@@ -35,15 +35,16 @@ class BaseImageConverter(object):
     def convert_debug(self, content_img, init_img, output_directory, max_iteration=1000, debug_span=100, random_init=False):
         init_array = self.xp.array(neural_art.utility.img2array(init_img))
         if random_init:
-            init_array = self.xp.random.uniform(-20, 20, init_array.shape, dtype=init_array.dtype)
+            init_array = self.xp.array(self.xp.random.uniform(-20, 20, init_array.shape), dtype=init_array.dtype)
         content_array = self.xp.array(neural_art.utility.img2array(content_img))
         content_layers = self.model.forward_layers(chainer.Variable(content_array), average_pooling=self.average_pooling)
 
         parameter_now = chainer.links.Parameter(init_array)
         self.optimizer.setup(parameter_now)
         for i in xrange(max_iteration+1):
-            neural_art.utility.print_ltsv({"max_iteration": i})
+            neural_art.utility.print_ltsv({"iteration": i})
             if i % debug_span == 0 and i > 0:
+                print("dump to {}".format(os.path.join(output_directory, "{}.png".format(i))))
                 neural_art.utility.array2img(chainer.cuda.to_cpu(parameter_now.W.data)).save(
                     os.path.join(output_directory, "{}.png".format(i)))
             parameter_now.zerograds()
